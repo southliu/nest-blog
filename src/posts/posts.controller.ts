@@ -8,11 +8,14 @@ import {
   Put,
 } from '@nestjs/common';
 import { ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
+import { IsNotEmpty } from 'class-validator';
 
 class CreatePostsDto {
-  @ApiProperty({ name: '标题' })
+  @IsNotEmpty({ message: '请填写标题' })
+  @ApiProperty({ name: 'title', enum: ['标题'] })
   title: string;
-  @ApiProperty({ name: '内容' })
+  @IsNotEmpty({ message: '请填写内容' })
+  @ApiProperty({ name: 'content', enum: ['内容'] })
   content: string;
 }
 
