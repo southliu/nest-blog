@@ -5,6 +5,7 @@ import { PostsModule } from './posts/posts.module';
 import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
+import { createClient } from 'redis';
 
 @Module({
   imports: [
@@ -23,6 +24,21 @@ import { User } from './user/entities/user.entity';
     UserModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: 'REDIS_CLIENT',
+      async useFactory() {
+        const client = createClient({
+          socket: {
+            host: 'localhost',
+            port: 6379,
+          },
+        });
+        await client.connect();
+        return client;
+      },
+    },
+  ],
 })
 export class AppModule {}
