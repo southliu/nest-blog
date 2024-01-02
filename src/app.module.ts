@@ -6,6 +6,7 @@ import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
 import { createClient } from 'redis';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -22,6 +23,12 @@ import { createClient } from 'redis';
       logging: true,
     }),
     UserModule,
+    JwtModule.register({
+      secret: 'south',
+      signOptions: {
+        expiresIn: '7d',
+      },
+    }),
   ],
   controllers: [AppController],
   providers: [
