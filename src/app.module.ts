@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
 import { createClient } from 'redis';
 import { JwtModule } from '@nestjs/jwt';
+import { Permission } from './user/entities/permission.entity';
 
 @Module({
   imports: [
@@ -17,8 +18,8 @@ import { JwtModule } from '@nestjs/jwt';
       port: 3308,
       username: 'root',
       password: 'demo666',
-      database: 'blog',
-      entities: [User],
+      database: 'acl_test',
+      entities: [User, Permission],
       synchronize: true,
       logging: true,
     }),

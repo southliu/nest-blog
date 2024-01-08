@@ -9,12 +9,13 @@ import {
   Inject,
   Res,
   UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import type { LoginDto } from './dto/login.dto';
-import type { RegisterDto } from './dto/register.dto';
+import { LoginDto } from './dto/login.dto';
+import { RegisterDto } from './dto/register.dto';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { LoginGuard } from 'src/login.guard';
@@ -28,7 +29,7 @@ export class UserController {
 
   @Post('login')
   async login(
-    @Body() user: LoginDto,
+    @Body(ValidationPipe) user: LoginDto,
     @Res({ passthrough: true }) res: Response,
   ) {
     const foundUser = await this.userService.login(user);
@@ -48,6 +49,11 @@ export class UserController {
     }
   }
 
+  @Post('register')
+  async register(@Body(ValidationPipe) user: RegisterDto) {
+    return await this.userService.register(user);
+  }
+
   @Get('aaa')
   @UseGuards(LoginGuard)
   aaa() {
@@ -58,11 +64,6 @@ export class UserController {
   @UseGuards(LoginGuard)
   bbb() {
     return 'bbb';
-  }
-
-  @Post('register')
-  async register(@Body() user: RegisterDto) {
-    return await this.userService.register(user);
   }
 
   @Post()
